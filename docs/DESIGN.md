@@ -51,7 +51,7 @@ OpenCode 启动时读取配置文件（`opencode.json` 或 `.opencode/config.jso
 
 ```json
 {
-  "plugins": ["openrtk"]
+  "plugins": ["@cafeng/openrtk"]
 }
 ```
 

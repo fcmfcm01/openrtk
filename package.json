@@ -1,5 +1,5 @@
 {
-  "name": "openrtk",
+  "name": "@cafeng/openrtk",
   "version": "0.1.0",
   "description": "OpenCode plugin for RTK (Rust Token Killer) — reduces LLM token consumption by 60-90%",
   "main": "src/index.ts",

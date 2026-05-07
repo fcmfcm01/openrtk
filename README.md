@@ -21,14 +21,14 @@ Verify: `rtk --version` should print `rtk X.Y.Z`.
 Install via npm:
 
 ```bash
-npm install openrtk
+npm install @cafeng/openrtk
 ```
 
 Add to your OpenCode config (`opencode.json` or `.opencode/config.json`):
 
 ```json
 {
-  "plugins": ["openrtk"]
+  "plugins": ["@cafeng/openrtk"]
 }
 ```
 
