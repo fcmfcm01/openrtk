@@ -18,11 +18,31 @@ describe("rewrite", () => {
     expect(rewrite("git status")).toBe("rtk git status")
   })
 
+  test("successful rewrite (exit code 3 — ask/default)", () => {
+    const err: any = new Error("exit code 3")
+    err.status = 3
+    err.stdout = "rtk git status"
+    err.stderr = ""
+    mockExecFileSync.mockImplementation(() => { throw err })
+    expect(rewrite("git status")).toBe("rtk git status")
+  })
+
   test("no rtk equivalent (exit code 1)", () => {
-    mockExecFileSync.mockImplementation(() => {
-      throw new Error("exit code 1")
-    })
+    const err: any = new Error("exit code 1")
+    err.status = 1
+    err.stdout = ""
+    err.stderr = ""
+    mockExecFileSync.mockImplementation(() => { throw err })
     expect(rewrite("some-unknown-command")).toBeNull()
+  })
+
+  test("deny rule (exit code 2) returns null", () => {
+    const err: any = new Error("exit code 2")
+    err.status = 2
+    err.stdout = ""
+    err.stderr = ""
+    mockExecFileSync.mockImplementation(() => { throw err })
+    expect(rewrite("rm -rf /")).toBeNull()
   })
 
   test("already-rtk guard", () => {

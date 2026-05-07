@@ -12,7 +12,13 @@ export function rewrite(command: string): string | null {
       stdio: ["pipe", "pipe", "pipe"],
     }).trim()
     return result && result !== command ? result : null
-  } catch {
+  } catch (e: any) {
+    // rtk rewrite exits with code 3 on successful rewrites (ask/default verdict).
+    // execFileSync throws on non-zero exit, so we extract stdout from the error.
+    if (e.status === 0 || e.status === 3) {
+      const result = (e.stdout as string)?.trim()
+      return result && result !== command ? result : null
+    }
     return null
   }
 }
