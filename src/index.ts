@@ -1,4 +1,4 @@
-import type { Plugin } from "@opencode-ai/plugin"
+import type { Plugin, PluginModule, Hooks } from "@opencode-ai/plugin"
 import { rewrite } from "./rewrite"
 import { Tracker } from "./tracker"
 
@@ -19,7 +19,7 @@ export function _resetRtkCheck(): void {
   rtkAvailable = null
 }
 
-export const rtkPlugin: Plugin = async ({ $ }) => {
+async function createRtkPlugin({ $ }: { $: any }): Promise<Hooks> {
   if (!checkRtk($)) {
     console.warn("[openrtk] rtk binary not found in PATH — plugin disabled")
     return {}
@@ -28,7 +28,7 @@ export const rtkPlugin: Plugin = async ({ $ }) => {
   const tracker = new Tracker()
 
   return {
-    "tool.execute.before": (input: any, output: any) => {
+    "tool.execute.before": async (input: any, output: any): Promise<void> => {
       const tool = String(input?.tool ?? "").toLowerCase()
       if (tool !== "bash" && tool !== "shell") return
 
@@ -45,8 +45,18 @@ export const rtkPlugin: Plugin = async ({ $ }) => {
       }
     },
 
-    "tool.execute.after": () => {},
+    "tool.execute.after": async (): Promise<void> => {},
   }
 }
 
-export default rtkPlugin
+const rtkPlugin: Plugin = async (input) => {
+  const hooks = await createRtkPlugin(input)
+  return hooks
+}
+
+export const openrtkPluginModule: PluginModule = {
+  id: "openrtk",
+  server: rtkPlugin,
+}
+
+export default openrtkPluginModule
