@@ -49,14 +49,14 @@ async function createRtkPlugin({ $ }: { $: any }): Promise<Hooks> {
   }
 }
 
-const rtkPlugin: Plugin = async (input) => {
+export const rtkPlugin: Plugin = async (input) => {
   const hooks = await createRtkPlugin(input)
   return hooks
 }
+
+export default rtkPlugin
 
 export const openrtkPluginModule: PluginModule = {
   id: "openrtk",
   server: rtkPlugin,
 }
-
-export default openrtkPluginModule
